@@ -1,13 +1,13 @@
 # docker + aws-cli + websockets-chat-app-demo
 
-# 環境構築
-## 自身のIAMの設定を環境設定する
+## 環境構築
+### 自身のIAMの設定を環境設定する
 ```
 $ export AWS_ACCESS_KEY_ID='xxxxxxxxxxxxx'
 $ export AWS_SECRET_ACCESS_KEY='xxxxxxxxxxxxxxxxxx'
 ```
 
-## aws-cliコンテナ起動＆接続
+### aws-cliコンテナ起動＆接続
 ```
 $ docker-compose build
 $ docker-compose run --rm aws-cli bash
@@ -15,7 +15,7 @@ $ aws --version
 $ cd /usr/src/app/simple-websockets-chat-app
 ```
 
-## サンプルプロジェクトをデプロイ
+### サンプルプロジェクトをデプロイ
 ```
 $ sam deploy --guided
 
@@ -61,7 +61,7 @@ Description         The WSS Protocol URI to connect to
 Value               wss://{YOUR-API-ID}.execute-api.{YOUR-REGION}.amazonaws.com/Prod  
 ```
 
-# 実行方法
+## 実行方法
 
 ```
 # wscatコマンドのインストール
@@ -74,6 +74,8 @@ connected (press CTRL+C to quit)
 > {"action":"sendmessage", "data":"hello world"}
 < hello world
 ```
+### 注意点
++ 3つLambdaのruntimeはNode.js10で実行することを推奨します。Node.js12で動作確認できませんでした。
 
 ## 参考文献
 + [APIGatewayでWebSocketが利用可能になったのでチャットAPIを構築してみた](https://qiita.com/G-awa/items/472bc1a9d46178f3d7a4)
