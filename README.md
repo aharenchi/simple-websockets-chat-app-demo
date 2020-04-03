@@ -71,11 +71,9 @@ $ wscat -c wss://{YOUR-API-ID}.execute-api.{YOUR-REGION}.amazonaws.com/prod
 connected (press CTRL+C to quit)
 
 # メッセージを送信
-> {"action":"sendmessage", "data":"hello world"}
+> {"message":"sendmessage", "data":"hello world"}
 < hello world
 ```
-### 注意点
-+ 3つLambdaのruntimeはNode.js10で実行することを推奨します。Node.js12で動作確認できませんでした。
 
 ## 参考文献
 + [APIGatewayでWebSocketが利用可能になったのでチャットAPIを構築してみた](https://qiita.com/G-awa/items/472bc1a9d46178f3d7a4)
