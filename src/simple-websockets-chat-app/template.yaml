@@ -7,9 +7,9 @@ Description: >
   functions needed to demonstrate the Websocket protocol on API Gateway.
 
 Parameters:
-  TableName:
+  ConnectionTable:
     Type: String
-    Default: 'simplechat_connections'
+    Default: 'chat_connections'
     Description: (Required) The name of the new DynamoDB to store connection identifiers for each connected clients. Minimum 3 characters
     MinLength: 3
     MaxLength: 50
@@ -112,7 +112,7 @@ Resources:
         WriteCapacityUnits: 5
       SSESpecification:
         SSEEnabled: True
-      TableName: !Ref TableName
+      TableName: !Ref ConnectionTable
   OnConnectFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -122,10 +122,10 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          TABLE_NAME: !Ref TableName
+          CONECTION_TABLE: !Ref ConnectionTable
       Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref TableName
+          TableName: !Ref ConnectionTable
   OnConnectPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
@@ -144,10 +144,10 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          TABLE_NAME: !Ref TableName
+          CONECTION_TABLE: !Ref ConnectionTable
       Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref TableName
+          TableName: !Ref ConnectionTable
   OnDisconnectPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
@@ -166,10 +166,10 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          TABLE_NAME: !Ref TableName
+          CONECTION_TABLE: !Ref ConnectionTable
       Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref TableName
+          TableName: !Ref ConnectionTable
       - Statement:
         - Effect: Allow
           Action:
