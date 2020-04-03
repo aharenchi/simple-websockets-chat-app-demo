@@ -5,13 +5,13 @@ const AWS = require('aws-sdk');
 
 const ddb = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: process.env.AWS_REGION });
 
-const { CONECTION_TABLE } = process.env;
+const { CONNECTION_TABLE } = process.env;
 
 exports.handler = async event => {
   let connectionData;
   
   try {
-    connectionData = await ddb.scan({ TableName: CONECTION_TABLE, ProjectionExpression: 'connectionId' }).promise();
+    connectionData = await ddb.scan({ TableName: CONNECTION_TABLE, ProjectionExpression: 'connectionId' }).promise();
   } catch (e) {
     return { statusCode: 500, body: e.stack };
   }

@@ -149,7 +149,7 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          CONECTION_TABLE: !Ref ConnectionTable
+          CONNECTION_TABLE: !Ref ConnectionTable
       Policies:
       - DynamoDBCrudPolicy:
           TableName: !Ref ConnectionTable
@@ -171,7 +171,7 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          CONECTION_TABLE: !Ref ConnectionTable
+          CONNECTION_TABLE: !Ref ConnectionTable
       Policies:
       - DynamoDBCrudPolicy:
           TableName: !Ref ConnectionTable
@@ -193,7 +193,7 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          CONECTION_TABLE: !Ref ConnectionTable
+          CONNECTION_TABLE: !Ref ConnectionTable
       Policies:
       - DynamoDBCrudPolicy:
           TableName: !Ref ConnectionTable
