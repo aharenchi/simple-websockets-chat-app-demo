@@ -62,6 +62,8 @@ Value               wss://{YOUR-API-ID}.execute-api.{YOUR-REGION}.amazonaws.com/
 ```
 
 ## 実行方法
+以下は、dockerではなく、自分の環境で実施してください。
+dockerにnpmがない欠陥..
 
 ```
 # wscatコマンドのインストール
