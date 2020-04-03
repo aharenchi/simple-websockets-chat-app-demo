@@ -15,6 +15,14 @@ Parameters:
     MaxLength: 50
     AllowedPattern: ^[A-Za-z_]+$
     ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
+  MessageTable:
+    Type: String
+    Default: 'chat_message'
+    Description: message
+    MinLength: 3
+    MaxLength: 50
+    AllowedPattern: ^[A-Za-z_]+$
+    ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
 
 Resources:
   SimpleChatWebSocket:
@@ -113,6 +121,25 @@ Resources:
       SSESpecification:
         SSEEnabled: True
       TableName: !Ref ConnectionTable
+  MessagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "connectionId"
+          AttributeType: "S"
+        - AttributeName: "message"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "connectionId"
+          KeyType: "HASH"
+        - AttributeName: "message"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      SSESpecification:
+        SSEEnabled: True
+      TableName: !Ref MessageTable
   OnConnectFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -190,6 +217,10 @@ Outputs:
   ConnectionsTableArn:
     Description: "Connections table ARN"
     Value: !GetAtt ConnectionsTable.Arn
+
+  MessageTableArn:
+    Description: "Message table ARN"
+    Value: !GetAtt MessagesTable.Arn
 
   OnConnectFunctionArn:
     Description: "OnConnect function ARN"
