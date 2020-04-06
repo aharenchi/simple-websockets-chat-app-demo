@@ -194,9 +194,9 @@ Resources:
       Environment:
         Variables:
           CONNECTION_TABLE: !Ref ConnectionTable
+          MESSAGE_TABLE: !Ref MessageTable
       Policies:
-      - DynamoDBCrudPolicy:
-          TableName: !Ref ConnectionTable
+      - AmazonDynamoDBFullAccess
       - Statement:
         - Effect: Allow
           Action:
