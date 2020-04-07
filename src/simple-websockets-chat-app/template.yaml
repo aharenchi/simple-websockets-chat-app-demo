@@ -76,6 +76,15 @@ Resources:
           Value: dev-public-route-table
       VpcId:
         Ref: DevVPC
+  DevPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: DevGatewayToInternet
+    Properties:
+      RouteTableId:
+        Ref: DevPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: DevInternetGateway
   DevPublicSubnetRouteTableAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
