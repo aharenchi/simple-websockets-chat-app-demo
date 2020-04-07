@@ -7,6 +7,12 @@ Description: >
   functions needed to demonstrate the Websocket protocol on API Gateway.
 
 Parameters:
+  Environment:
+    Type: String
+    AllowedValues:
+      - dev
+      - prod
+    Default: dev
   ConnectionTable:
     Type: String
     Default: 'chat_connections'
@@ -24,11 +30,18 @@ Parameters:
     AllowedPattern: ^[A-Za-z_]+$
     ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
 
+Mappings:
+  EnvironmentMap:
+    dev:
+      env: "dev"
+    prod:
+      env: "prod"
+
 Resources:
   SimpleChatWebSocket:
     Type: AWS::ApiGatewayV2::Api
     Properties:
-      Name: SimpleChatWebSocket
+      Name: !Join [ '' , [ 'SimpleChatWebSocket' , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
       ProtocolType: WEBSOCKET
       RouteSelectionExpression: "$request.body.message"
   ConnectRoute:
@@ -120,7 +133,7 @@ Resources:
         WriteCapacityUnits: 5
       SSESpecification:
         SSEEnabled: True
-      TableName: !Ref ConnectionTable
+      TableName: !Join [ '' , [ !Ref ConnectionTable , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
   MessagesTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -139,10 +152,11 @@ Resources:
         WriteCapacityUnits: 5
       SSESpecification:
         SSEEnabled: True
-      TableName: !Ref MessageTable
+      TableName: !Join [ '' , [ !Ref MessageTable, '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
   OnConnectFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ '' , [ 'OnConnectFunction' , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
       CodeUri: onconnect/
       Handler: app.handler
       MemorySize: 256
@@ -165,6 +179,7 @@ Resources:
   OnDisconnectFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ '' , [ 'OnDisconnectFunction' , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
       CodeUri: ondisconnect/
       Handler: app.handler
       MemorySize: 256
@@ -187,6 +202,7 @@ Resources:
   SendMessageFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: !Join [ '' , [ 'SendMessageFunction' , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
       CodeUri: sendmessage/
       Handler: app.handler
       MemorySize: 256
