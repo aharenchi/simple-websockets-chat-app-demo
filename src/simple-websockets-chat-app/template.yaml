@@ -76,6 +76,13 @@ Resources:
           Value: dev-public-route-table
       VpcId:
         Ref: DevVPC
+  DevPublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: DevPublicSubnet
+      RouteTableId:
+        Ref: DevPublicRouteTable
   SimpleChatWebSocket:
     Type: AWS::ApiGatewayV2::Api
     Properties:
