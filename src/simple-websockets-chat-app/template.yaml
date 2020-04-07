@@ -115,7 +115,7 @@ Resources:
   Stage:
     Type: AWS::ApiGatewayV2::Stage
     Properties:
-      StageName: Prod
+      StageName: !Ref Environment
       Description: Prod Stage
       DeploymentId: !Ref Deployment
       ApiId: !Ref SimpleChatWebSocket
