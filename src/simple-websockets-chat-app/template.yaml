@@ -55,6 +55,19 @@ Resources:
       Tags:
         - Key: Name
           Value: dev-subnet-private-a
+  DevInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: dev-internet-gateway
+  DevGatewayToInternet:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: DevVPC
+      InternetGatewayId:
+        Ref: DevInternetGateway
   SimpleChatWebSocket:
     Type: AWS::ApiGatewayV2::Api
     Properties:
