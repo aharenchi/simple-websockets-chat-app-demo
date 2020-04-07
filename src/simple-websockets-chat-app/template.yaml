@@ -7,10 +7,18 @@ Description: >
   functions needed to demonstrate the Websocket protocol on API Gateway.
 
 Parameters:
-  TableName:
+  ConnectionTable:
     Type: String
-    Default: 'simplechat_connections'
+    Default: 'chat_connections'
     Description: (Required) The name of the new DynamoDB to store connection identifiers for each connected clients. Minimum 3 characters
+    MinLength: 3
+    MaxLength: 50
+    AllowedPattern: ^[A-Za-z_]+$
+    ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
+  MessageTable:
+    Type: String
+    Default: 'chat_message'
+    Description: message
     MinLength: 3
     MaxLength: 50
     AllowedPattern: ^[A-Za-z_]+$
@@ -112,7 +120,26 @@ Resources:
         WriteCapacityUnits: 5
       SSESpecification:
         SSEEnabled: True
-      TableName: !Ref TableName
+      TableName: !Ref ConnectionTable
+  MessagesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: "connectionId"
+          AttributeType: "S"
+        - AttributeName: "message"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "connectionId"
+          KeyType: "HASH"
+        - AttributeName: "message"
+          KeyType: "RANGE"
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      SSESpecification:
+        SSEEnabled: True
+      TableName: !Ref MessageTable
   OnConnectFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -122,10 +149,10 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          TABLE_NAME: !Ref TableName
+          CONNECTION_TABLE: !Ref ConnectionTable
       Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref TableName
+          TableName: !Ref ConnectionTable
   OnConnectPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
@@ -144,10 +171,10 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          TABLE_NAME: !Ref TableName
+          CONNECTION_TABLE: !Ref ConnectionTable
       Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref TableName
+          TableName: !Ref ConnectionTable
   OnDisconnectPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
@@ -166,10 +193,10 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          TABLE_NAME: !Ref TableName
+          CONNECTION_TABLE: !Ref ConnectionTable
+          MESSAGE_TABLE: !Ref MessageTable
       Policies:
-      - DynamoDBCrudPolicy:
-          TableName: !Ref TableName
+      - AmazonDynamoDBFullAccess
       - Statement:
         - Effect: Allow
           Action:
@@ -190,6 +217,10 @@ Outputs:
   ConnectionsTableArn:
     Description: "Connections table ARN"
     Value: !GetAtt ConnectionsTable.Arn
+
+  MessageTableArn:
+    Description: "Message table ARN"
+    Value: !GetAtt MessagesTable.Arn
 
   OnConnectFunctionArn:
     Description: "OnConnect function ARN"
