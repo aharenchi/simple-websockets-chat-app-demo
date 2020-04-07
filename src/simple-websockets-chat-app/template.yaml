@@ -68,6 +68,14 @@ Resources:
         Ref: DevVPC
       InternetGatewayId:
         Ref: DevInternetGateway
+  DevPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: dev-public-route-table
+      VpcId:
+        Ref: DevVPC
   SimpleChatWebSocket:
     Type: AWS::ApiGatewayV2::Api
     Properties:
