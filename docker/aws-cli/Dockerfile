@@ -16,4 +16,7 @@ RUN pip install --user --upgrade aws-sam-cli
 # install command.
 RUN apt-get update && apt-get install -y less vim
 
+# install node
+RUN apt-get install nodejs && apt-get install npm && npm install -g wscat
+
 WORKDIR /root

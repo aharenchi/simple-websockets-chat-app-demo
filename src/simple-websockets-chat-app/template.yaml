@@ -25,6 +25,73 @@ Parameters:
     ConstraintDescription: 'Required. Can be characters and underscore only. No numbers or special characters allowed.'
 
 Resources:
+  DevVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 172.18.174.0/24
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      InstanceTenancy: dedicated
+      Tags:
+        - Key: Name
+          Value: dev-vpc
+  DevPublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: DevVPC
+      CidrBlock: 172.18.174.0/26
+      AvailabilityZone: "ap-northeast-1a"
+      Tags:
+        - Key: Name
+          Value: dev-subnet-public-a
+  DevPrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId:
+        Ref: DevVPC
+      CidrBlock: 172.18.174.128/26
+      AvailabilityZone: "ap-northeast-1a"
+      Tags:
+        - Key: Name
+          Value: dev-subnet-private-a
+  DevInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: dev-internet-gateway
+  DevGatewayToInternet:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: DevVPC
+      InternetGatewayId:
+        Ref: DevInternetGateway
+  DevPublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      Tags:
+        - Key: Name
+          Value: dev-public-route-table
+      VpcId:
+        Ref: DevVPC
+  DevPublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: DevGatewayToInternet
+    Properties:
+      RouteTableId:
+        Ref: DevPublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: DevInternetGateway
+  DevPublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: DevPublicSubnet
+      RouteTableId:
+        Ref: DevPublicRouteTable
   SimpleChatWebSocket:
     Type: AWS::ApiGatewayV2::Api
     Properties:
