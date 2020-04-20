@@ -163,10 +163,10 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          CONNECTION_TABLE: !Ref ConnectionTable
+          CONNECTION_TABLE: !Join [ '' , [ !Ref ConnectionTable , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
       Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref ConnectionTable
+          TableName: !Join [ '' , [ !Ref ConnectionTable , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
   OnConnectPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
@@ -186,10 +186,10 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          CONNECTION_TABLE: !Ref ConnectionTable
+          CONNECTION_TABLE: !Join [ '' , [ !Ref ConnectionTable , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
       Policies:
       - DynamoDBCrudPolicy:
-          TableName: !Ref ConnectionTable
+          TableName: !Join [ '' , [ !Ref ConnectionTable , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
   OnDisconnectPermission:
     Type: AWS::Lambda::Permission
     DependsOn:
@@ -209,8 +209,8 @@ Resources:
       Runtime: nodejs12.x
       Environment:
         Variables:
-          CONNECTION_TABLE: !Ref ConnectionTable
-          MESSAGE_TABLE: !Ref MessageTable
+          CONNECTION_TABLE: !Join [ '' , [ !Ref ConnectionTable , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
+          MESSAGE_TABLE: !Join [ '' , [ !Ref MessageTable , '-', !FindInMap [ EnvironmentMap, !Ref Environment, env] ] ]
       Policies:
       - AmazonDynamoDBFullAccess
       - Statement:
